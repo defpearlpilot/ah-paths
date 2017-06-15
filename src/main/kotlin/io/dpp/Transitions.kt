@@ -1,8 +1,13 @@
 package io.dpp
 
+import java.math.BigDecimal
+import java.math.BigInteger
+
 
 object Transitions
 {
+  val keys = setOf('A', 'E', 'I', 'O', 'U', 'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', '1', '2', '3')
+
   val vowels = setOf('A', 'E', 'I', 'O', 'U')
 
   fun isVowel(ch: Char): Boolean
@@ -31,4 +36,10 @@ object Transitions
                           Pair('3', listOf('L', 'H', 'J')))
 
   val alphas = transitions.entries.map { (key, value) -> Pair(key, value.filter { ch -> !isVowel(ch) } ) }.toMap()
+
+  fun count(depth: Int, letters: Set<Char>): BigDecimal
+  {
+//    letters.flatMap {  }
+    return BigDecimal(0)
+  }
 }
