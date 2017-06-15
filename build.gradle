@@ -2,10 +2,11 @@ group 'defpearlpilot'
 version '0.1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.1.2-2'
+    ext.kotlin_version = '1.1.2-5'
     ext.guava_version = '22.0'
     ext.spek_version = '1.1.2'
     ext.junit_gradle_version = '1.0.0-M4'
+    ext.expekt_version = '0.5.0'
 
     repositories {
         mavenCentral()
@@ -42,6 +43,7 @@ repositories {
 
 
 junitPlatform {
+    platformVersion junit_gradle_version
     filters {
         engines {
             include 'spek'
@@ -53,7 +55,11 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "com.google.guava:guava:$guava_version"
     compile "org.jetbrains.spek:spek-api:$spek_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    testCompile "com.winterbe:expekt:$expekt_version"
     testCompile "org.jetbrains.spek:spek-api:$spek_version"
+
     testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
 }
 
