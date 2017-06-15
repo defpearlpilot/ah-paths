@@ -8,8 +8,9 @@ class App
     fun main(args: Array<String>)
     {
 //      println(Transitions.alphas)
-
-      println(Key.of('A').traverseAll())
+      println("Hello")
+      println(Key.of('A'))
+      println(Key.of('A').traverse('L')?.traverse('A')?.traverse('L')?.traverseAll())
     }
   }
 }

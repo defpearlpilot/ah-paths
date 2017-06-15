@@ -1,28 +1,25 @@
 package com.ah;
 
 
-//import com.google.common.collect.Lists;
-//import com.google.common.collect.Maps;
-//import com.google.common.collect.Sets;
-//
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Set;
-//import java.util.stream.Collectors;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This captures the transitions from a particular node to nodes on the path
  */
 public class Transitions
 {
-//    private static final Set<Character> VOWELS = Sets.newHashSet( 'A', 'E', 'I', 'O', 'U' );
-//
-//
-//    private static final Map< Character, List< Character > > STATE_TRANSITIONS = Maps.newHashMap( );
-//
-//
-//    private static final Map< Character, List< Character > > NONVOWEL_TRANSITIONS = Maps.newHashMap( );
+    private static final Set<Character> VOWELS = Sets.newHashSet('A', 'E', 'I', 'O', 'U' );
+
+
+    private static final Map< Character, List< Character > > STATE_TRANSITIONS = Maps.newHashMap( );
+
+
+    private static final Map< Character, List< Character >> NONVOWEL_TRANSITIONS = Maps.newHashMap( );
 //
 //
 //    static
