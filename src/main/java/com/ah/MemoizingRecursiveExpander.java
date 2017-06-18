@@ -31,7 +31,7 @@ public class MemoizingRecursiveExpander
 
 
     /**
-     * Main entry point method to count paths from the selected character at the depth initialized
+     * Main entry point method to pathsForSequenceLength pathsForSequenceLength from the selected character at the depth initialized
      * in the constructor
      *
      * @param ch
@@ -80,7 +80,7 @@ public class MemoizingRecursiveExpander
     /**
      * If we have memoized the node counts from a particular node for the incremental depth then return it.
      * <p>
-     * Otherwise, we expand the paths and memoize and return that.
+     * Otherwise, we expand the pathsForSequenceLength and memoize and return that.
      *
      * @param node
      * @return a map of nodes to occurrences
@@ -127,11 +127,11 @@ public class MemoizingRecursiveExpander
         while ( currentDepth <= depth )
         {
             /*
-            At higher sequence counts, we'd have to recursively traverse millions of possible paths.  For each distinct starting point,
-             the next possible paths are deterministic.  So count the occurrences which will later be used to multiply by the possible paths
+            At higher sequence counts, we'd have to recursively traverse millions of possible pathsForSequenceLength.  For each distinct starting point,
+             the next possible pathsForSequenceLength are deterministic.  So pathsForSequenceLength the occurrences which will later be used to multiply by the possible pathsForSequenceLength
              for each node
 
-            For each node, expand to the paths under it and merge the occurrences in a map.
+            For each node, expand to the pathsForSequenceLength under it and merge the occurrences in a map.
 
             Also, I couldn't figure out how to do this merge with my Java 8 experimentation.
              */

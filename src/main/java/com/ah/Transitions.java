@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * This captures the transitions from a particular node to nodes on the path
+ * This captures the TRANSITIONS from a particular node to nodes on the path
  */
 public class Transitions
 {

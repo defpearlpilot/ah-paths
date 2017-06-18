@@ -1,25 +1,24 @@
 package io.dpp
 
 import java.math.BigDecimal
-import java.math.BigInteger
 
 
 object Transitions
 {
-  val keys = setOf('A', 'E', 'I', 'O', 'U', 'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', '1', '2', '3')
+  val KEYBOARD_LETTERS = setOf('A', 'E', 'I', 'O', 'U', 'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', '1', '2', '3')
 
-  val vowels = setOf('A', 'E', 'I', 'O', 'U')
+  val VOWELS = setOf('A', 'E', 'I', 'O', 'U')
 
   fun isVowel(ch: Char): Boolean
   {
-    return vowels.contains(ch)
+    return VOWELS.contains(ch)
   }
 
-  val transitions = mapOf(Pair('A', listOf('L', 'H')),
+  val TRANSITIONS = mapOf(Pair('A', listOf('L', 'H')),
                           Pair('E', listOf('H', 'N')),
                           Pair('I', listOf('2', 'L', 'B')),
                           Pair('O', listOf('2', 'H', 'D')),
-                          /* consonant transitions */
+                          /* consonant TRANSITIONS */
                           Pair('B', listOf('K', 'M', 'I')),
                           Pair('C', listOf('F', 'L', 'N', 'J')),
                           Pair('D', listOf('G', 'M', 'O')),
@@ -35,11 +34,99 @@ object Transitions
                           Pair('2', listOf('K', 'G', 'I', 'O')),
                           Pair('3', listOf('L', 'H', 'J')))
 
-  val alphas = transitions.entries.map { (key, value) -> Pair(key, value.filter { ch -> !isVowel(ch) } ) }.toMap()
+  val ALPHAS = TRANSITIONS.entries.map { (key, value) -> Pair(key, value.filter { ch -> !isVowel(ch) }) }.toMap()
 
-  fun count(depth: Int, letters: Set<Char>): BigDecimal
+
+  fun pathsForSequenceLength(maxSequence: Int, letters: Set<Char>): BigDecimal
   {
-//    letters.flatMap {  }
-    return BigDecimal(0)
+    val keys = letters.map { letter -> Key.of(letter) }.toSet()
+    return when (maxSequence) {
+      0 -> BigDecimal.ZERO
+      1 -> BigDecimal(keys.size)
+      else -> pathsForKeys(maxSequence, 2, keys)
+    }
   }
+
+
+  fun pathsForSequenceLength(maxSequence: Int, key: Key): BigDecimal
+  {
+    return when (maxSequence) {
+      0 -> BigDecimal.ZERO
+      1 -> BigDecimal.ONE
+      else -> pathsForKey(maxSequence, 1, key)
+    }
+  }
+
+
+  fun transitiveKeys(letters: Set<Char>): Set<Key>
+  {
+    fun getKeys(keys: Set<Key>): Set<Key>
+    {
+      fun keysRecursively(traversedKeys: Set<Key>): Set<Key>
+      {
+        return when(keys.containsAll(traversedKeys)) {
+          true -> return keys
+          else -> getKeys(traversedKeys)
+        }
+      }
+
+      val traversedKeys = keys.flatMap { it.traverseAll() }.toSet()
+      return keysRecursively(traversedKeys)
+    }
+
+    val keys = letters.map{ letter -> Key.of(letter) }.toSet()
+    return getKeys(keys)
+  }
+
+
+  private fun pathsForKeys(maxSequence: Int, currentSequence: Int, keys: Set<Key>): BigDecimal
+  {
+    fun countRecursively(groupedKeys: Map<Key, List<Key>>): BigDecimal
+    {
+      val aggregateCount = groupedKeys.keys.map { Pair(it, pathsForKeys(maxSequence, currentSequence + 1, setOf(it))) }.toMap()
+      return countGrouped(groupedKeys, aggregateCount)
+    }
+
+    val groupedKeys = keys.flatMap { it.traverseAll() }.groupBy { it -> it }
+
+    return when (currentSequence) {
+      maxSequence -> countGrouped(groupedKeys)
+      else -> countRecursively(groupedKeys)
+    }
+  }
+
+
+  private fun pathsForKey(maxSequence: Int, currentSequence: Int, key: Key): BigDecimal
+  {
+    fun countRecursively(groupedKeys: Map<Key, List<Key>>): BigDecimal
+    {
+      val aggregateCount = groupedKeys.keys.map { Pair(it, pathsForKeys(maxSequence, currentSequence + 1, setOf(it))) }.toMap()
+      return countGrouped(groupedKeys, aggregateCount)
+    }
+
+    val groupedKeys = mapOf(Pair(key, key.traverseAll()))
+
+    return when (currentSequence) {
+      maxSequence -> countGrouped(groupedKeys)
+      else -> countRecursively(groupedKeys)
+    }
+  }
+
+
+  private fun countGrouped(groupedKeys: Map<Key, List<Key>>): BigDecimal
+  {
+    return groupedKeys.entries.fold(BigDecimal.ZERO, {acc, entry -> acc.add(BigDecimal(entry.value.size)) })
+  }
+
+
+  private fun countGrouped(groupedKeys: Map<Key, List<Key>>, aggregate: Map<Key, BigDecimal>): BigDecimal
+  {
+    fun count(acc: BigDecimal, entry: Map.Entry<Key, List<Key>>): BigDecimal
+    {
+      return acc.add(aggregate[entry.key]?.multiply(BigDecimal(entry.value.size)))
+    }
+
+    return groupedKeys.entries.fold(BigDecimal.ZERO, ::count)
+  }
+
 }

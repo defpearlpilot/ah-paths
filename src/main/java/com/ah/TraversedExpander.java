@@ -37,7 +37,7 @@ public class TraversedExpander
 
 
         int min = nodes.stream().map( node -> node.getVowelsVisited() ).min(Integer::min).get();
-        System.out.println( "Min vowels visited is " + min );
+        System.out.println( "Min VOWELS visited is " + min );
         Set<Character> distinct = nodes.stream().map( node -> node.getCharacter() ).collect( Collectors.toSet() );
         System.out.println( "Distinct " + distinct );
 

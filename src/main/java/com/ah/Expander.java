@@ -35,7 +35,7 @@ public class Expander
 //        int min = nodes.stream().map( node -> node.getVowelsVisited() ).min(Integer::min).get();
 //        Set<Character> distinct = nodes.stream( ).map( node -> node.getCharacter( ) ).collect( Collectors.toSet( ) );
 //
-//        System.out.println( "Min vowels visited is " + min );
+//        System.out.println( "Min VOWELS visited is " + min );
 //        System.out.println( "Distinct " + distinct );
 //        System.out.println( "At depth " + ( currentDepth -1 ) + " has node amount " + nodes.size() );
 //
@@ -45,10 +45,10 @@ public class Expander
 //
 //    private List< TraversedNode > expand( TraversedNode startingPoint )
 //    {
-//        List< Character > transitions = startingPoint.getVowelsVisited() >= 2 ? Transitions.getNVTransitions( startingPoint.getCharacter( ) )
-//                                                                              : Transitions.getTransitions( startingPoint.getCharacter( ) );
+//        List< Character > TRANSITIONS = startingPoint.getVowelsVisited() >= 2 ? Transitions.getNVTransitions( startingPoint.getCharacter( ) )
+//                                                                              : Transitions.getTRANSITIONS( startingPoint.getCharacter( ) );
 //
-//        return transitions.stream()
+//        return TRANSITIONS.stream()
 //                          .map( ch -> new TraversedNode( ch, startingPoint.getVowelsVisited() + ( Transitions.isVowel( startingPoint.getCharacter() ) ? 1 : 0 ) ) )
 //                          .collect( Collectors.toList( ) );
 //    }

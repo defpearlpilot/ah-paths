@@ -29,7 +29,7 @@ public class KnightMoves
             BigDecimal paths = memo.countPaths( ch );
             depthPathMap.put( depth, paths );
 
-            System.out.println( "At depth " + depth + " paths " + paths + " took " + time1.toString( ) );
+            System.out.println( "At depth " + depth + " pathsForSequenceLength " + paths + " took " + time1.toString( ) );
         }
     }
 
@@ -80,7 +80,7 @@ public class KnightMoves
 
             MemoizingRecursiveExpander memoizingRecursiveExpander = new MemoizingRecursiveExpander( sequenceLength );
             BigDecimal numPaths = memoizingRecursiveExpander.countPaths( startNode );
-            System.out.println( "The number of paths is: " + numPaths );
+            System.out.println( "The number of pathsForSequenceLength is: " + numPaths );
         }
         catch ( IOException e )
         {

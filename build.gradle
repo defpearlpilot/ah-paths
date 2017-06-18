@@ -16,6 +16,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.guava:guava:$guava_version"
         classpath "org.junit.platform:junit-platform-gradle-plugin:$junit_gradle_version"
+        classpath "org.apache.commons:commons-lang3:3.5"
     }
 }
 
@@ -56,7 +57,7 @@ dependencies {
     compile "com.google.guava:guava:$guava_version"
     compile "org.jetbrains.spek:spek-api:$spek_version"
     compile "org.jetbrains.kotlin:kotlin-reflect"
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    compile "org.apache.commons:commons-lang3:3.5"
     testCompile "com.winterbe:expekt:$expekt_version"
     testCompile "org.jetbrains.spek:spek-api:$spek_version"
 
