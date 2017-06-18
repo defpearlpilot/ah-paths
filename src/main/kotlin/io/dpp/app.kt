@@ -13,6 +13,7 @@ class App
 //      println(Transitions.pathsForSequenceLength(2, Transitions.KEYBOARD_LETTERS))
 //      println(Transitions.pathsForSequenceLength(3, Transitions.KEYBOARD_LETTERS))
       println(Collector.pathsForSequence(5, 'A'))
+      println(Collector.pathMapForSequence(5, 'A'))
 
 
     }

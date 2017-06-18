@@ -5,7 +5,6 @@ import java.math.BigDecimal
 
 class Expansion(val maxSequence: Int, val key: Key)
 {
-
   val pathMap = pathMapForSequenceLength()
   val paths = pathMap.values.reduce { acc, count -> acc.add(count) }
 
@@ -25,10 +24,7 @@ class Expansion(val maxSequence: Int, val key: Key)
     {
       return when(currentSequence)
       {
-        maxSequence ->
-        {
-          flatten(byKeyList)
-        }
+        maxSequence -> flatten(byKeyList)
         else ->
         {
           val grouped = byKeyList.values.flatMap { paths -> paths.flatMap { it.traverseAll() } }.groupBy { it -> it }
@@ -41,19 +37,14 @@ class Expansion(val maxSequence: Int, val key: Key)
     *
     * */
     val byKeyList = keys.flatMap{ it.traverseAll() }.groupBy { it -> it }
-
-    return when(currentSequence)
-    {
-      maxSequence -> flatten(byKeyList)
-      else -> expand(currentSequence, byKeyList)
-    }
+    return expand(currentSequence, byKeyList)
   }
 
 
   private fun flatten(map: Map<Key, List<Key>>): Map<Key, BigDecimal>
   {
     val flattened = map.entries.map{ (k, v) -> Pair(k, BigDecimal(v.size)) }.toMap()
-    val byChar = flattened.entries.groupBy { it -> it.key.key() }
+//    val byChar = flattened.entries.groupBy { it -> it.key.key() }
     return flattened
   }
 
