@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Created by andrew on 5/16/15.
  */
-public class MemoizingRecursiveExpander
+public class MemoRecursiveExpander
 {
     private final int depth;
 
@@ -23,7 +23,7 @@ public class MemoizingRecursiveExpander
     private final Map< TraversedNode, Map< TraversedNode, Long > > memoizedTraversals = Maps.newHashMap( );
 
 
-    public MemoizingRecursiveExpander( int _depth )
+    public MemoRecursiveExpander(int _depth )
     {
         depth = _depth;
         splitter = new Splitter( depth );
@@ -108,7 +108,7 @@ public class MemoizingRecursiveExpander
      * @param startingPoint
      * @return
      */
-    private Map< TraversedNode, Long > captureExpansion( int depth, TraversedNode startingPoint )
+    public static Map< TraversedNode, Long > captureExpansion( int depth, TraversedNode startingPoint )
     {
         if ( startingPoint.isVowel( ) )
         {
@@ -162,7 +162,7 @@ public class MemoizingRecursiveExpander
     }
 
 
-    private List< TraversedNode > expand( TraversedNode startingPoint )
+    private static List< TraversedNode > expand( TraversedNode startingPoint )
     {
         List< Character > transitions = startingPoint.canVisitVowels( ) ? Transitions.getTransitions( startingPoint.getCharacter( ) )
                 : Transitions.getNVTransitions( startingPoint.getCharacter( ) );

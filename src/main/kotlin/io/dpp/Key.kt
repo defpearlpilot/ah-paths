@@ -7,11 +7,13 @@ class Key {
       return Key(ch)
     }
 
-
     fun visited(ch: Char): Key {
-      return Key(ch, 2)
+      return Key(ch, 1)
     }
 
+    fun exhausted(ch: Char): Key {
+      return Key(ch, 2)
+    }
   }
 
   private val _key: Char

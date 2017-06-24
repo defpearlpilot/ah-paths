@@ -1,5 +1,6 @@
 package io.dpp
 
+import com.ah.TraversedNode
 import java.math.BigDecimal
 
 
@@ -53,7 +54,7 @@ object Transitions
     return when (maxSequence) {
       0 -> BigDecimal.ZERO
       1 -> BigDecimal.ONE
-      else -> pathsForKey(maxSequence, 1, key)
+      else -> pathsForKey(maxSequence, 2, key)
     }
   }
 
@@ -81,35 +82,30 @@ object Transitions
 
   private fun pathsForKeys(maxSequence: Int, currentSequence: Int, keys: Set<Key>): BigDecimal
   {
-    fun countRecursively(groupedKeys: Map<Key, List<Key>>): BigDecimal
-    {
-      val aggregateCount = groupedKeys.keys.map { Pair(it, pathsForKeys(maxSequence, currentSequence + 1, setOf(it))) }.toMap()
-      return countGrouped(groupedKeys, aggregateCount)
-    }
-
     val groupedKeys = keys.flatMap { it.traverseAll() }.groupBy { it -> it }
 
     return when (currentSequence) {
       maxSequence -> countGrouped(groupedKeys)
-      else -> countRecursively(groupedKeys)
+      else -> countRecursively(maxSequence, currentSequence, groupedKeys)
     }
   }
 
 
   private fun pathsForKey(maxSequence: Int, currentSequence: Int, key: Key): BigDecimal
   {
-    fun countRecursively(groupedKeys: Map<Key, List<Key>>): BigDecimal
-    {
-      val aggregateCount = groupedKeys.keys.map { Pair(it, pathsForKeys(maxSequence, currentSequence + 1, setOf(it))) }.toMap()
-      return countGrouped(groupedKeys, aggregateCount)
-    }
-
     val groupedKeys = mapOf(Pair(key, key.traverseAll()))
 
     return when (currentSequence) {
       maxSequence -> countGrouped(groupedKeys)
-      else -> countRecursively(groupedKeys)
+      else -> countRecursively(maxSequence, currentSequence, groupedKeys)
     }
+  }
+
+
+  private fun countRecursively(maxSequence: Int, currentSequence: Int, groupedKeys: Map<Key, List<Key>>): BigDecimal
+  {
+    val aggregateCount = groupedKeys.keys.map { Pair(it, pathsForKeys(maxSequence, currentSequence + 1, setOf(it))) }.toMap()
+    return countGrouped(groupedKeys, aggregateCount)
   }
 
 
@@ -128,5 +124,6 @@ object Transitions
 
     return groupedKeys.entries.fold(BigDecimal.ZERO, ::count)
   }
+
 
 }

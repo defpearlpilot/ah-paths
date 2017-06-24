@@ -3,14 +3,12 @@ package com.ah;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -25,7 +23,7 @@ public class KnightMoves
         for (Integer depth: new Integer[] {2, 3, 10,16,24,28, 32, 64})
         {
             Stopwatch time1 = Stopwatch.createStarted();
-            MemoizingRecursiveExpander memo = new MemoizingRecursiveExpander( depth );
+            MemoRecursiveExpander memo = new MemoRecursiveExpander( depth );
             BigDecimal paths = memo.countPaths( ch );
             depthPathMap.put( depth, paths );
 
@@ -78,8 +76,8 @@ public class KnightMoves
                 }
             }
 
-            MemoizingRecursiveExpander memoizingRecursiveExpander = new MemoizingRecursiveExpander( sequenceLength );
-            BigDecimal numPaths = memoizingRecursiveExpander.countPaths( startNode );
+            MemoRecursiveExpander memoRecursiveExpander = new MemoRecursiveExpander( sequenceLength );
+            BigDecimal numPaths = memoRecursiveExpander.countPaths( startNode );
             System.out.println( "The number of pathsForSequenceLength is: " + numPaths );
         }
         catch ( IOException e )

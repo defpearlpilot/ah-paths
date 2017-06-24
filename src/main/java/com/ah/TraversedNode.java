@@ -21,7 +21,7 @@ public class TraversedNode
 
 
 
-    TraversedNode( Character _ch, int _vowelsVisited )
+    public TraversedNode( Character _ch, int _vowelsVisited )
     {
         ch = _ch;
         vowelsVisited = _vowelsVisited;
@@ -29,7 +29,7 @@ public class TraversedNode
     }
 
 
-    TraversedNode( Character _ch )
+    public TraversedNode( Character _ch )
     {
         this( _ch, 0 );
     }
@@ -94,7 +94,8 @@ public class TraversedNode
         }
 
         TraversedNode otherNode = (TraversedNode) other;
-        return ch.equals( otherNode.ch ) && canVisitVowels == otherNode.canVisitVowels;
+        return ch.equals( otherNode.ch ) && vowelsVisited == otherNode.vowelsVisited;
+//        return ch.equals( otherNode.ch ) && canVisitVowels == otherNode.canVisitVowels;
     }
 
 

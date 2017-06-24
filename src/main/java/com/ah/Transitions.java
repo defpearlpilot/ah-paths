@@ -27,7 +27,6 @@ public class Transitions
 
     static
     {
-
         STATE_TRANSITIONS.put( 'A', Lists.newArrayList( 'L', 'H' ) );
         STATE_TRANSITIONS.put( 'E', Lists.newArrayList( 'H', 'N' ) );
         STATE_TRANSITIONS.put( 'I', Lists.newArrayList( '2', 'L', 'B' ) );
