@@ -97,7 +97,11 @@ object Collector
 
     fun expand(currentSequence: Int, keyMap: Map<Key, BigDecimal>): Map<Key, BigDecimal>
     {
-      fun _expand(size: Int, keyMap: Map<Key, BigDecimal>, expansionProv: (size: Int, key: Key) -> Expansion) {
+      fun _customExpansion(size: Int, key: Key): Expansion = Expansion(size, key)
+      fun _warmedExpansion(size: Int, key: Key): Expansion = expansions.expansionFor(key)
+
+      fun _expand(size: Int, keyMap: Map<Key, BigDecimal>, expansionProv: (size: Int, key: Key) -> Expansion): Map<Key, BigDecimal>
+      {
         val expandedPairs = keyMap.entries.map { (key, count) ->
           val expansion = expansionProv.invoke(size, key)
           val expanded = expand(currentSequence + size - 1, expansion.pathMap)
@@ -107,43 +111,19 @@ object Collector
           Pair(key, factor)
         }
 
-        expandedPairs.toMap()
+        return expandedPairs.toMap()
       }
 
-//      println("Current sequence $currentSequence")
       return when {
         (maxSequence == currentSequence) -> {
           keyMap
         }
         (maxSequence - currentSequence < batchSize) -> {
           val spread = maxSequence - currentSequence + 1
-
-          val expandedPairs = keyMap.entries.map { (key, count) ->
-//            println("${" ".repeat(currentSequence)} $currentSequence $spread $key $count")
-
-            val expansion = Expansion(spread, key)
-//            println("${" ".repeat(currentSequence)} $expansion")
-            val expanded = expand(currentSequence + spread - 1, expansion.pathMap)
-            val expandedCount = sumSizes(expanded)
-            val factor = count.multiply(expandedCount)
-
-//            println("${" ".repeat(currentSequence)} $currentSequence $key C$count => F$factor")
-            Pair(key, factor)
-          }
-
-          expandedPairs.toMap()
+          return _expand(spread, keyMap, ::_customExpansion)
         }
         else -> {
-          val expandedPairs = keyMap.entries.map { (key, count) ->
-            val expansion = expansions.expansionFor(key)
-            val expanded = expand(currentSequence + batchSize - 1, expansion.pathMap)
-            val expandedCount = sumSizes(expanded)
-            val factor = count.multiply(expandedCount)
-//            println("${" ".repeat(currentSequence)} $currentSequence $key C$count => F$factor")
-            Pair(key, factor)
-          }
-
-          expandedPairs.toMap()
+          return _expand(batchSize, keyMap, ::_warmedExpansion)
         }
       }
     }
