@@ -19,12 +19,12 @@ class App
 //      println(Collector.pathCountForKey(5, Key.visited('A')))
 //      println(Collector.pathCountForKey(5, Key.exhausted('A')))
 
-      println(Collector.pathCountForKey(3, Key.of('A')))
-      println(MemoRecursiveExpander(2).countPaths('A'))
-
-
-      println(Collector.pathCountForKey(3, Key.of('L')))
-      println(MemoRecursiveExpander(2).countPaths('L'))
+//      println(Collector.pathCountForKey(3, Key.of('A')))
+//      println(MemoRecursiveExpander(2).countPaths('A'))
+//
+//
+//      println(Collector.pathCountForKey(3, Key.of('L')))
+//      println(MemoRecursiveExpander(2).countPaths('L'))
 
 //      println(Collector.pathCountForKey(5, Key.of('L')))
 //      println(MemoRecursiveExpander(4).countPaths('L'))
@@ -36,9 +36,13 @@ class App
 //      println(Collector.pathCountForKey(11, Key.of('L')))
 //      println(MemoRecursiveExpander(10).countPaths('L'))
 //
-      println(Collector.pathCountForKey(10, Key.of('L')))
-      println(Collector.pathsForSequence(10, Key.of('L')))
-      println(Collector.memoExpand(9, 'L'))
+//      println(Collector.pathCountForKey(10, Key.of('L')))
+//      println(Collector.pathsForSequence(10, Key.of('L')))
+//      println(Collector.memoExpand(9, 'L'))
+
+      println(Collector.pathCountForKey(32, Key.of('L')))
+//      println(Collector.pathsForSequence(32, Key.of('L')))
+      println(Collector.memoExpand(31, 'L'))
 
 //      Transitions.ALPHAS.forEach { key ->
 //        println(Collector.pathsForSequence(5, key.key))

@@ -95,10 +95,21 @@ object Collector
     val expansions = ExpansionCache(batchSize)
     expansions.warm(Transitions.transitiveKeys(Transitions.KEYBOARD_LETTERS))
 
+    fun _customExpansion(size: Int, key: Key): Expansion = Expansion(size, key)
+    fun _warmedExpansion(size: Int, key: Key): Expansion = expansions.expansionFor(key)
+
+    return _pathMapForSequence(maxSequence, key, batchSize, ::_warmedExpansion, ::_customExpansion)
+  }
+
+  private fun _pathMapForSequence(maxSequence: Int,
+                                  key: Key,
+                                  batchSize: Int,
+                                  batchExpProvider: (size: Int, key: Key) -> Expansion,
+                                  remainExpProvider: (size: Int, key: Key) -> Expansion): Map<Key, BigDecimal>
+  {
+
     fun expand(currentSequence: Int, keyMap: Map<Key, BigDecimal>): Map<Key, BigDecimal>
     {
-      fun _customExpansion(size: Int, key: Key): Expansion = Expansion(size, key)
-      fun _warmedExpansion(size: Int, key: Key): Expansion = expansions.expansionFor(key)
 
       fun _expand(size: Int, keyMap: Map<Key, BigDecimal>, expansionProv: (size: Int, key: Key) -> Expansion): Map<Key, BigDecimal>
       {
@@ -120,15 +131,15 @@ object Collector
         }
         (maxSequence - currentSequence < batchSize) -> {
           val spread = maxSequence - currentSequence + 1
-          return _expand(spread, keyMap, ::_customExpansion)
+          return _expand(spread, keyMap, remainExpProvider)
         }
         else -> {
-          return _expand(batchSize, keyMap, ::_warmedExpansion)
+          return _expand(batchSize, keyMap, batchExpProvider)
         }
       }
     }
 
-    val expansion = expansions.expansionFor(key)
+    val expansion = batchExpProvider.invoke(batchSize, key)
     return expand(batchSize, expansion.pathMap)
   }
 

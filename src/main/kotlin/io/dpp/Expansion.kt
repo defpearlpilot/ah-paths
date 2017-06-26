@@ -8,6 +8,13 @@ class Expansion(val maxSequence: Int, val key: Key)
   val pathMap = pathMapForSequenceLength()
   val paths = pathMap.values.fold(BigDecimal.ZERO, { acc, count -> acc.add(count) })
 
+
+  override fun toString(): String
+  {
+    return "Expansion($key, $maxSequence, #$paths, ${pathMap.keys})"
+  }
+
+
   fun pathMapForSequenceLength(): Map<Key, BigDecimal>
   {
     return when (maxSequence) {
@@ -40,10 +47,6 @@ class Expansion(val maxSequence: Int, val key: Key)
     return expand(currentSequence, byKeyList)
   }
 
-  override fun toString(): String
-  {
-    return "Expansion($key, $maxSequence, #$paths, ${pathMap.keys})"
-  }
 
   private fun flatten(map: Map<Key, List<Key>>): Map<Key, BigDecimal>
   {

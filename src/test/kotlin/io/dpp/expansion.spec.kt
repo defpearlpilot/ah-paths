@@ -23,8 +23,13 @@ object ExpansionSpec: Spek({
 
    on("expansion of size one")
    {
-     val paths = Expansion(1, letterA).paths
-     it("should be one") {
+     it("should be one for a") {
+       val paths = Expansion(1, Key.of('A')).paths
+       expect(paths).to.be.equal(BigDecimal.ONE)
+     }
+
+     it("should be one for b") {
+       val paths = Expansion(1, Key.of('B')).paths
        expect(paths).to.be.equal(BigDecimal.ONE)
      }
    }
