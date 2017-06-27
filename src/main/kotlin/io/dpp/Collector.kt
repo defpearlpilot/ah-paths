@@ -45,13 +45,13 @@ class ExpansionCache(private val size: Int)
 
 object Collector
 {
-  fun pathsForSequence(maxSequence: Int, letter: Char): BigDecimal
+  fun expansionPathsForSequence(maxSequence: Int, letter: Char): BigDecimal
   {
-    return pathsForSequence(maxSequence, Key.of(letter))
+    return expansionPathsForSequence(maxSequence, Key.of(letter))
   }
 
 
-  fun pathsForSequence(maxSequence: Int, key: Key): BigDecimal
+  fun expansionPathsForSequence(maxSequence: Int, key: Key): BigDecimal
   {
     return Expansion(maxSequence, key).paths
   }
@@ -66,6 +66,19 @@ object Collector
   fun pathCountForKey(maxSequence: Int, key: Key): BigDecimal
   {
     return pathMapForKey(maxSequence, key).values.fold(BigDecimal.ZERO, { b1, b2 -> b1.add(b2) })
+  }
+
+
+  fun pathCountsForChars(maxSequence: Int, letters: List<Char>): Map<Char, BigDecimal>
+  {
+    val keys = letters.map { l -> Key.of(l) }
+    return pathCountsForKeys(maxSequence, keys).entries.map{ it -> Pair(it.key.key(), it.value) }.toMap()
+  }
+
+
+  fun pathCountsForKeys(maxSequence: Int, keys: List<Key>): Map<Key, BigDecimal>
+  {
+    return pathCountsForSequences(maxSequence, keys)
   }
 
 
@@ -100,6 +113,27 @@ object Collector
 
     return _pathMapForSequence(maxSequence, key, batchSize, ::_warmedExpansion, ::_customExpansion)
   }
+
+
+  private fun pathCountsForSequences(maxSequence: Int, keys: List<Key>): Map<Key, BigDecimal>
+  {
+    val batching = Batching.forSequence(maxSequence)
+    val batchSize = batching.batchSize
+    println("Batching $batching")
+
+    // warm with an initial set of transitive keys
+    val expansions = ExpansionCache(batchSize)
+    expansions.warm(Transitions.transitiveKeys(Transitions.KEYBOARD_LETTERS))
+
+    fun _customExpansion(size: Int, key: Key): Expansion = Expansion(size, key)
+    fun _warmedExpansion(size: Int, key: Key): Expansion = expansions.expansionFor(key)
+
+    return keys.map { key ->
+      val pathMap = _pathMapForSequence(maxSequence, key, batchSize, ::_warmedExpansion, ::_customExpansion)
+      Pair(key, sumSizes(pathMap))
+    }.toMap()
+  }
+
 
   private fun _pathMapForSequence(maxSequence: Int,
                                   key: Key,
@@ -141,12 +175,6 @@ object Collector
 
     val expansion = batchExpProvider.invoke(batchSize, key)
     return expand(batchSize, expansion.pathMap)
-  }
-
-
-  private fun flattenListsToSizes(map: Map<Key, List<Key>>): Map<Key, BigDecimal>
-  {
-    return map.entries.map{ (k, v) -> Pair(k, BigDecimal(v.size)) }.toMap()
   }
 
 

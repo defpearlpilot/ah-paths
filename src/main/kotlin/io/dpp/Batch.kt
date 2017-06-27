@@ -8,6 +8,16 @@ class Batching(val batchSize: Int,val initialBatchSize: Int)
     fun forSequence(depth: Int): Batching
     {
       return when {
+        depth > 50 -> {
+          val batchSize = 15
+          val initialBatchSize = depth % batchSize
+          Batching(batchSize, initialBatchSize)
+        }
+        depth > 30 -> {
+          val batchSize = 12
+          val initialBatchSize = depth % batchSize
+          Batching(batchSize, initialBatchSize)
+        }
         depth > 10 -> {
           val batchSize = 10
           val initialBatchSize = depth % batchSize
