@@ -37,27 +37,6 @@ object Transitions
   val ALPHAS = TRANSITIONS.entries.map { (key, value) -> Pair(key, value.filter { ch -> !isVowel(ch) }) }.toMap()
 
 
-  fun pathsForSequenceLength(maxSequence: Int, letters: Set<Char>): BigDecimal
-  {
-    val keys = letters.map { letter -> Key.of(letter) }.toSet()
-    return when (maxSequence) {
-      0 -> BigDecimal.ZERO
-      1 -> BigDecimal(keys.size)
-      else -> pathsForKeys(maxSequence, 2, keys)
-    }
-  }
-
-
-  fun pathsForSequenceLength(maxSequence: Int, key: Key): BigDecimal
-  {
-    return when (maxSequence) {
-      0 -> BigDecimal.ZERO
-      1 -> BigDecimal.ONE
-      else -> pathsForKey(maxSequence, 2, key)
-    }
-  }
-
-
   fun transitiveKeys(letters: Set<Char>): Set<Key>
   {
     fun getKeys(keys: Set<Key>): Set<Key>
@@ -70,7 +49,7 @@ object Transitions
         }
       }
 
-      val traversedKeys = keys.flatMap { it.traverseAll() }.toSet()
+      val traversedKeys = keys.flatMap { it.traverseAll() }.toSet().plus(keys)
       return keysRecursively(traversedKeys)
     }
 
@@ -82,17 +61,6 @@ object Transitions
   private fun pathsForKeys(maxSequence: Int, currentSequence: Int, keys: Set<Key>): BigDecimal
   {
     val groupedKeys = keys.flatMap { it.traverseAll() }.groupBy { it -> it }
-
-    return when (currentSequence) {
-      maxSequence -> countGrouped(groupedKeys)
-      else -> countRecursively(maxSequence, currentSequence, groupedKeys)
-    }
-  }
-
-
-  private fun pathsForKey(maxSequence: Int, currentSequence: Int, key: Key): BigDecimal
-  {
-    val groupedKeys = mapOf(Pair(key, key.traverseAll()))
 
     return when (currentSequence) {
       maxSequence -> countGrouped(groupedKeys)

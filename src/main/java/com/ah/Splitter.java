@@ -15,7 +15,7 @@ public class Splitter
 
     public Splitter( int depth )
     {
-        if ( depth >= 10 )
+        if ( depth > 10 )
         {
             batchSize = 10;
             initialBatchSize = depth % batchSize;

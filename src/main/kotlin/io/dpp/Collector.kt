@@ -19,13 +19,7 @@ class ExpansionCache(private val size: Int)
 
   fun warm(keys: Set<Key>)
   {
-    keys.forEach(
-        { key ->
-          val expansion = Expansion(size, key)
-//          println("Warming cache $key $expansion")
-          cache.put(key, expansion)
-        })
-
+    keys.forEach { key -> cache.put(key, Expansion(size, key)) }
   }
 
   fun expansionFor(key: Key): Expansion
@@ -34,27 +28,15 @@ class ExpansionCache(private val size: Int)
     if (expansion == null) {
       val computed = Expansion(size, key)
       cache.put(key, computed)
-//      println("Computed expansion for $key $computed ${cache[key]}")
       return computed
     }
 
-//    println("Expansion for $key $expansion")
     return expansion
   }
 }
 
 object Collector
 {
-  fun expansionPathsForSequence(maxSequence: Int, letter: Char): BigDecimal
-  {
-    return expansionPathsForSequence(maxSequence, Key.of(letter))
-  }
-
-
-  fun expansionPathsForSequence(maxSequence: Int, key: Key): BigDecimal
-  {
-    return Expansion(maxSequence, key).paths
-  }
 
 
   fun pathCountForChar(maxSequence: Int, letter: Char): BigDecimal
@@ -81,11 +63,6 @@ object Collector
     return pathCountsForSequences(maxSequence, keys)
   }
 
-
-  fun pathMapForChar(maxSequence: Int, letter: Char): Map<Key, BigDecimal>
-  {
-    return pathMapForKey(maxSequence, Key.of(letter))
-  }
 
 
   private fun pathMapForKey(maxSequence: Int, key: Key): Map<Key, BigDecimal>
